@@ -1,4 +1,5 @@
-//
+//modification of pre-existing ray tracer program, to support multithreading
+
 //  main.c
 //  srt
 //
