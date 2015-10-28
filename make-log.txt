@@ -1,0 +1,33 @@
+$ make clean check
+rm -f *.o *.tmp 1-test.ppm 2-test.ppm 4-test.ppm 8-test.ppm srt srt.tgz
+gcc -std=gnu99 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o main.o main.c
+gcc -std=gnu99 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o raymath.o raymath.c
+gcc -std=gnu99 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o shaders.o shaders.c
+gcc -std=gnu99 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread -o srt main.o raymath.o shaders.o -lm
+time ./srt 1-test.ppm >1-test.ppm.tmp
+
+real    0m48.070s
+user    0m48.071s
+sys     0m0.003s
+mv 1-test.ppm.tmp 1-test.ppm
+time ./srt 2-test.ppm >2-test.ppm.tmp
+
+real    0m24.939s
+user    0m48.419s
+sys     0m0.003s
+mv 2-test.ppm.tmp 2-test.ppm
+time ./srt 4-test.ppm >4-test.ppm.tmp
+
+real    0m16.702s
+user    0m48.481s
+sys     0m0.003s
+mv 4-test.ppm.tmp 4-test.ppm
+time ./srt 8-test.ppm >8-test.ppm.tmp
+
+real    0m10.710s
+user    0m50.116s
+sys     0m0.003s
+mv 8-test.ppm.tmp 8-test.ppm
+for file in 1-test.ppm 2-test.ppm 4-test.ppm 8-test.ppm; do \
+          diff -u baseline.ppm $file || exit; \
+        done

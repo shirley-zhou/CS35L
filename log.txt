@@ -1,0 +1,36 @@
+Export path, to use newest version of sort:
+$export PATH=/usr/local/cs/bin:$PATH
+
+Check version:
+$sort --version
+
+Generate random numbers in double-precision floating point,
+then use sed and tr to remove the first column and change spaces to newlines:
+$od -t f -N 80 /dev/urandom | sed -e 's/^.......\s*//' | tr -s ' ' '\n' > randnumbers.txt
+
+Record time of sort with 1 thread:
+$time -p sort -g --parallel=1 randnumbers.txt > /dev/null
+real 142.24
+user 140.04
+sys 0.27
+
+Time with 2 threads:
+$time -p sort -g --parallel=2 randnumbers.txt > /dev/null
+real 77.33
+user 146.67
+sys 0.24
+
+Time with 4 threads:
+$time -p sort -g --parallel=4 randnumbers.txt > /dev/null
+real 43.14
+user 144.61
+sys 0.31
+
+Time with 8 threads:
+time -p sort -g --parallel=8 randnumbers.txt > /dev/null
+real 38.60
+user 226.08
+sys 0.40
+
+Conclusion:
+The times are decreasing as the number of threads increase, because more things are being processed at once on different CPUs.
